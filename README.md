@@ -2,24 +2,31 @@
 
 Un asistente virtual bancario inteligente construido con Rasa NLU, FastAPI y React, que proporciona respuestas naturales y amigables para consultas bancarias.
 
-# Características
+# Funcionalidades
+- Consultas de saldo
+- Transferencias bancarias
+- Pagos y operaciones básicas
+- Gestión de sesiones y contexto
+- Historial persistente
+- API REST con FastAPI
+- Interfaz web desarrollada en React
 
-**Inteligencia Artificial Real** - Powered by Rasa NLU
-**Respuestas Amigables** - Conversaciones naturales y empáticas
-**Operaciones Bancarias** - Consultas de saldo, transferencias, pagos
-**Historial Persistente** - Base de datos PostgreSQL
-**Caché Rápido** - Redis para sesiones y contexto
-**API REST** - FastAPI con documentación automática
-**Frontend Moderno** - React con diseño bancario profesional
-**Containerizado** - Docker Compose para fácil despliegue
+## Tecnologias utilizadas
+-Rasa NLU
+-FastAPI
+-React
+-PostgreSQL
+-Redis
+-Docker Compose
 
-## Inicio Rápido
-
-### Requisitos Previos
-
-- Docker y Docker Compose instalados
-- Python 3.11+ (para desarrollo local)
-- Node.js 18+ (para desarrollo del frontend)
+## Requisitos previos
+Para ejecutar el proyecto se requiere:
+- Docker y Docker Compose
+- Python 3.11 o superior
+- Node.js 18 o superior
+- PostgreSQL
+- Redis
+- Git
 
 ## DESARROLLADOR
 Edwin Alan Atenco Beltran
