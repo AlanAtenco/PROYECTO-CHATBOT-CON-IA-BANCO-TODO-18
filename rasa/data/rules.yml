@@ -1,0 +1,40 @@
+version: "3.1"
+
+rules:
+
+- rule: saludo
+  steps:
+    - intent: saludo
+    - action: utter_saludo
+
+- rule: iniciar transferencia
+  steps:
+    - intent: transferencia
+    - action: transferencia_form
+    - active_loop: transferencia_form
+
+- rule: iniciar pago
+  steps:
+    - intent: pago_servicios
+    - action: pago_form
+    - active_loop: pago_form
+
+- rule: ayuda
+  steps:
+    - intent: ayuda
+    - action: utter_ayuda
+
+- rule: bloqueo
+  steps:
+    - intent: bloqueo_tarjeta
+    - action: action_bloquear_tarjeta
+
+- rule: despedida
+  steps:
+    - intent: despedida
+    - action: utter_despedida
+
+- rule: fallback
+  steps:
+    - intent: nlu_fallback
+    - action: utter_fallback

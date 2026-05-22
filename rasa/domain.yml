@@ -1,0 +1,139 @@
+version: "3.1"
+
+intents:
+  - saludo
+  - consultar_saldo
+  - consultar_movimientos
+  - transferencia
+  - pago_servicios
+  - bloqueo_tarjeta
+  - ayuda
+  - despedida
+  - dar_datos_transferencia
+  - dar_datos_pago
+  - affirm
+  - deny
+
+entities:
+  - numero_cuenta
+  - monto
+  - nombre_destinatario
+  - servicio
+
+slots:
+  nombre_destinatario:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: nombre_destinatario
+
+  monto:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: monto
+      - type: from_text
+        conditions:
+          - active_loop: transferencia_form
+            requested_slot: monto
+      - type: from_text
+        conditions:
+          - active_loop: pago_form
+            requested_slot: monto
+
+  numero_cuenta:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: numero_cuenta
+      - type: from_text
+        conditions:
+          - active_loop: transferencia_form
+            requested_slot: numero_cuenta
+      - type: from_text
+        conditions:
+          - active_loop: pago_form
+            requested_slot: numero_cuenta
+
+  servicio:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: servicio
+      - type: from_text
+        conditions:
+          - active_loop: pago_form
+            requested_slot: servicio
+
+forms:
+  transferencia_form:
+    required_slots:
+      - nombre_destinatario
+      - numero_cuenta
+      - monto
+  pago_form:
+    required_slots:
+      - servicio
+      - numero_cuenta
+      - monto
+
+actions:
+  - action_consultar_saldo
+  - action_consultar_movimientos
+  - action_ejecutar_transferencia
+  - action_ejecutar_pago
+  - action_bloquear_tarjeta
+  - validate_transferencia_form
+  - validate_pago_form
+
+responses:
+  utter_saludo:
+    - text: "Hola, soy tu asistente bancario. ¿Qué deseas hacer?"
+
+  utter_ask_nombre_destinatario:
+    - text: "¿A quién deseas transferir el dinero?"
+
+  utter_ask_monto:
+    - text: "¿Cuánto deseas enviar?"
+
+  utter_ask_numero_cuenta:
+    - text: "¿Cuál es el número de cuenta o referencia?"
+
+  utter_ask_servicio:
+    - text: "¿Qué servicio deseas pagar? (luz, agua, internet)"
+
+  utter_confirmar_transferencia:
+    - text: "Confirmación de Transferencia:\n- Destinatario: {nombre_destinatario}\n- Cuenta: {numero_cuenta}\n- Monto: ${monto} MXN\n\n¿Es correcto?"
+
+  utter_transferencia_exitosa:
+    - text: "Transferencia realizada con éxito"
+
+  utter_confirmar_pago:
+    - text: "Confirmación de Pago de Servicio:\n- Servicio: {servicio}\n- Referencia/Cuenta: {numero_cuenta}\n- Monto: ${monto} MXN\n\n¿Deseas proceder con el pago?"
+
+  utter_pago_exitoso:
+    - text: "Pago realizado correctamente"
+
+  utter_bloqueo:
+    - text: "Tarjeta bloqueada por seguridad"
+
+  utter_ayuda:
+    - text: |
+        Puedo ayudarte con:
+        - Consultar saldo
+        - Movimientos
+        - Transferencias
+        - Pagos
+        - Bloqueo de tarjeta
+
+  utter_cancelado:
+    - text: "Operación cancelada"
+
+  utter_despedida:
+    - text: "Hasta pronto. Recuerda que estoy aquí para ayudarte con tus finanzas."
+
+  utter_fallback:
+    - text: "Solo puedo ayudarte con: saldo, transferencias, pagos y bloqueo de tarjeta"

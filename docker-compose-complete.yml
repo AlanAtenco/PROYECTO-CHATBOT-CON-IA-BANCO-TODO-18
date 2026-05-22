@@ -1,0 +1,103 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:14-alpine
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: asistente_bancario_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init:/docker-entrypoint-initdb.d:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d asistente_bancario_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis_cache
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  action_server:
+    build:
+      context: ./rasa/actions
+      dockerfile: Dockerfile
+    container_name: rasa_action_server
+    ports:
+      - "5055:5055"
+    environment:
+      - DATABASE_URL=postgresql://admin:admin@postgres:5432/asistente_bancario_db
+      - DEFAULT_ACCOUNT_NUMBER=1234567890
+    volumes:
+      - ./rasa/actions:/app/actions
+    command: start --actions actions --port 5055 --debug
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  rasa:
+    image: rasa/rasa:3.6.0
+    container_name: rasa_nlu
+    ports:
+      - "5005:5005"
+    volumes:
+      - ./rasa:/app
+    environment:
+      - RASA_NLU_FALLBACK_THRESHOLD=0.3
+      - RASA_CORE_FALLBACK_THRESHOLD=0.4
+    command: run --enable-api --cors "*" --debug
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      action_server:
+        condition: service_started
+    # Eliminamos el healthcheck estricto que bloquea a otros si el modelo no está cargado
+    # El usuario debe entrenar primero.
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: fastapi_backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://admin:admin@postgres:5432/asistente_bancario_db
+      - REDIS_URL=redis://redis:6379
+      - RASA_URL=http://rasa:5005
+    volumes:
+      - ./backend:/app
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rasa:
+        condition: service_started # Cambiado de service_healthy a service_started
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+volumes:
+  postgres_data:
+
+networks:
+  default:
+    name: asistente_bancario_network

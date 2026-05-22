@@ -1,0 +1,86 @@
+version: "3.1"
+
+stories:
+
+- story: saludo y ayuda
+  steps:
+  - intent: saludo
+  - action: utter_saludo
+  - intent: ayuda
+  - action: utter_ayuda
+
+- story: consulta saldo directa
+  steps:
+  - intent: consultar_saldo
+  - action: action_consultar_saldo
+
+- story: consulta movimientos directa
+  steps:
+  - intent: consultar_movimientos
+  - action: action_consultar_movimientos
+
+- story: transferencia completa fluida
+  steps:
+  - intent: transferencia
+  - action: transferencia_form
+  - active_loop: transferencia_form
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  - action: utter_confirmar_transferencia
+  - intent: affirm
+  - action: action_ejecutar_transferencia
+
+- story: pago completo fluido
+  steps:
+  - intent: pago_servicios
+  - action: pago_form
+  - active_loop: pago_form
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  - action: utter_confirmar_pago
+  - intent: affirm
+  - action: action_ejecutar_pago
+
+- story: pago agua directo
+  steps:
+  - intent: pago_servicios
+    entities:
+    - servicio: agua
+  - action: pago_form
+  - active_loop: pago_form
+  - active_loop: null
+  - action: utter_confirmar_pago
+  - intent: affirm
+  - action: action_ejecutar_pago
+
+- story: cancelar operacion en transferencia
+  steps:
+  - intent: transferencia
+  - action: transferencia_form
+  - active_loop: transferencia_form
+  - intent: deny
+  - action: action_deactivate_loop
+  - active_loop: null
+  - action: utter_cancelado
+
+- story: cancelar operacion en pago
+  steps:
+  - intent: pago_servicios
+  - action: pago_form
+  - active_loop: pago_form
+  - intent: deny
+  - action: action_deactivate_loop
+  - active_loop: null
+  - action: utter_cancelado
+
+- story: interrupcion para consultar saldo y volver
+  steps:
+  - intent: transferencia
+  - action: transferencia_form
+  - active_loop: transferencia_form
+  - intent: consultar_saldo
+  - action: action_consultar_saldo
+  - action: transferencia_form
+  - active_loop: transferencia_form

@@ -1,0 +1,206 @@
+version: "3.1"
+
+nlu:
+
+- intent: saludo
+  examples: |
+    - hola
+    - buenas tardes
+    - buenos días
+    - qué tal
+    - hola asistente
+    - hey
+    - hola bot
+    - saludos
+    - buen día
+
+- intent: despedida
+  examples: |
+    - adiós
+    - hasta luego
+    - chau
+    - nos vemos
+    - terminar
+    - gracias adiós
+    - bye
+
+- intent: consultar_saldo
+  examples: |
+    - saldo
+    - cuánto dinero tengo
+    - ver mi saldo disponible
+    - checar mi cuenta
+    - cuánto me queda
+    - mostrar saldo
+    - consulta de saldo
+    - dime mi saldo actual
+    - tengo dinero en mi cuenta
+    - saldo de mi tarjeta
+
+- intent: consultar_movimientos
+  examples: |
+    - movimientos
+    - historial de transacciones
+    - qué he gastado
+    - ver mis compras
+    - últimas transacciones
+    - mostrar historial
+    - ver movimientos de mi cuenta
+    - lista de gastos
+    - qué depósitos tengo
+    - ver mi estado de cuenta
+
+- intent: transferencia
+  examples: |
+    - quiero transferir [500](monto) a [alan](nombre_destinatario)
+    - enviar [1000](monto) a [juan](nombre_destinatario)
+    - transferir [200](monto) a [maria](nombre_destinatario)
+    - hacer una transferencia
+    - quiero mandar dinero
+    - realizar un envío de dinero
+    - transferir a otra cuenta
+    - mandar [300](monto) pesos a [carlos](nombre_destinatario)
+    - transferencia bancaria
+    - enviar dinero a [pedro](nombre_destinatario)
+
+- intent: pago_servicios
+  examples: |
+    - pagar agua
+    - pagar luz
+    - pagar internet
+    - quiero pagar el recibo de la luz
+    - pago de servicios
+    - liquidar mi recibo de [luz](servicio)
+    - quiero pagar [agua](servicio) [500](monto)
+    - pagar [luz](servicio) [300](monto)
+    - pagar recibo de [internet](servicio)
+    - realizar un pago
+    - pagar mis servicios
+    - quiero hacer un pago
+    - pagar recibo
+    - pago luz
+    - pago agua
+    - pago internet
+    - pagar [luz](servicio) ahora
+    - pagar [agua](servicio) por favor
+    - pagar mi recibo de [internet](servicio)
+    - servicio de [luz](servicio)
+    - servicio de [agua](servicio)
+    - servicio de [internet](servicio)
+    - el agua
+    - mi recibo de agua
+    - pagar agua ahora
+    - cuenta de agua
+    - servicio de agua potable
+    - recibo del agua
+    - pagar el agua por favor
+    - agua potable
+    - pago de agua
+    - liquidar agua
+    - pagar servicio de agua
+    - el agua
+    - agua
+    - mi recibo del agua
+    - pago agua ahora
+    - servicio agua
+    - quiero pagar agua
+    - pagar servicio de luz
+    - pagar servicio de internet
+    - pagar [agua](servicio)
+    - pagar [luz](servicio)
+    - pagar [internet](servicio)
+    - quiero pagar [luz](servicio)
+    - quiero pagar [agua](servicio)
+    - quiero pagar [internet](servicio)
+    - mi cuenta de [luz](servicio)
+    - mi cuenta de [agua](servicio)
+    - mi cuenta de [internet](servicio)
+
+- intent: bloqueo_tarjeta
+  examples: |
+    - bloquear tarjeta
+    - perdí mi tarjeta y quiero bloquearla
+    - me robaron mi tarjeta
+    - bloquear mi cuenta por seguridad
+    - cancelar tarjeta por robo
+    - suspender mi tarjeta
+    - extravié mi plástico
+    - bloquear mi tarjeta de débito
+    - quiero inhabilitar mi tarjeta
+
+- intent: ayuda
+  examples: |
+    - ayuda
+    - qué puedes hacer
+    - opciones disponibles
+    - dime tus funciones
+    - cómo funcionas
+    - qué me recomiendas
+    - auxilio
+    - menú de opciones
+
+- intent: dar_datos_transferencia
+  examples: |
+    - [1234567890](numero_cuenta)
+    - mi cuenta es [162773882929](numero_cuenta)
+    - a la cuenta [627838822](numero_cuenta)
+    - depositar a [1029384756](numero_cuenta)
+    - la cuenta es [56231456789](numero_cuenta)
+    - [500](monto)
+    - son [100](monto) pesos
+    - quiero enviar [1500](monto)
+    - enviar [500](monto)
+    - [500](monto) pesos
+    - para [juan perez](nombre_destinatario)
+    - es para [maría garcía](nombre_destinatario)
+    - para [ariel](nombre_destinatario)
+    - es para [alan](nombre_destinatario)
+
+- intent: dar_datos_pago
+  examples: |
+    - pagar [luz](servicio)
+    - el servicio es [agua](servicio)
+    - recibo de [internet](servicio)
+    - son [300](monto)
+    - el monto es [450](monto)
+    - pagar [600](monto)
+    - mi cuenta de servicio es [52478916](numero_cuenta)
+    - la referencia es [5556221456563](numero_cuenta)
+    - [1200](monto)
+    - quiero pagar [1200](monto)
+    - monto [1200](monto)
+
+- intent: affirm
+  examples: |
+    - si
+    - sí
+    - claro
+    - correcto
+    - va
+    - dale
+    - ok
+    - de acuerdo
+    - confirmar
+    - acepto
+    - adelante
+    - está bien
+
+- intent: deny
+  examples: |
+    - no
+    - cancelar
+    - detener
+    - mejor no
+    - ahora no
+    - negativo
+    - para nada
+    - rechazar
+
+- regex: numero_cuenta
+  examples: |
+    - \b\d{7,20}\b
+
+- regex: monto
+  examples: |
+    - \b\d{1,6}\b
+    - \b\d{1,6}\.\d{2}\b
